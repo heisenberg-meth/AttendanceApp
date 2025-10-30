@@ -38,7 +38,9 @@ async function getResendClient() {
   }
 
   connectionSettings = await fetch(
-    "https://" + hostname + "/api/v2/connection?include_secrets=true&connector_names=resend",
+    "https://" +
+      hostname +
+      "/api/v2/connection?include_secrets=true&connector_names=resend",
     {
       headers: {
         Accept: "application/json",
@@ -68,7 +70,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { employeeId } = req.body;
 
       const employeesRef = db.collection("employees");
-      const snapshot = await employeesRef.where("employeeId", "==", employeeId).limit(1).get();
+      const snapshot = await employeesRef
+        .where("employeeId", "==", employeeId)
+        .limit(1)
+        .get();
 
       if (snapshot.empty) {
         return res.status(404).json({ error: "Employee not found" });
@@ -102,7 +107,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.json(null);
       }
 
-      const attendance = { id: snapshot.docs[0].id, ...snapshot.docs[0].data() };
+      const attendance = {
+        id: snapshot.docs[0].id,
+        ...snapshot.docs[0].data(),
+      };
       return res.json(attendance);
     } catch (error: any) {
       console.error("Get today attendance error:", error);
@@ -125,7 +133,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .limit(10)
         .get();
 
-      const attendance = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const attendance = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
       return res.json(attendance);
     } catch (error: any) {
       console.error("Get recent attendance error:", error);
@@ -144,7 +155,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Get employee details
-      const employeeDoc = await db.collection("employees").doc(employeeId).get();
+      const employeeDoc = await db
+        .collection("employees")
+        .doc(employeeId)
+        .get();
       if (!employeeDoc.exists) {
         return res.status(404).json({ error: "Employee not found" });
       }
@@ -181,7 +195,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.json({ id: docRef.id, ...newAttendance });
       } else if (type === "check-out") {
         if (snapshot.empty) {
-          return res.status(400).json({ error: "No check-in record found for today" });
+          return res
+            .status(400)
+            .json({ error: "No check-in record found for today" });
         }
 
         // Update existing attendance record
@@ -217,7 +233,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .orderBy("submittedAt", "desc")
         .get();
 
-      const leaves = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const leaves = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
       return res.json(leaves);
     } catch (error: any) {
       console.error("Get leaves error:", error);
@@ -231,12 +250,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { type, startDate, endDate, duration, reason } = req.body;
       const employeeId = req.query.employeeId as string;
 
-      if (!employeeId || !type || !startDate || !endDate || !duration || !reason) {
+      if (
+        !employeeId ||
+        !type ||
+        !startDate ||
+        !endDate ||
+        !duration ||
+        !reason
+      ) {
         return res.status(400).json({ error: "Missing required fields" });
       }
 
       // Get employee details
-      const employeeDoc = await db.collection("employees").doc(employeeId).get();
+      const employeeDoc = await db
+        .collection("employees")
+        .doc(employeeId)
+        .get();
       if (!employeeDoc.exists) {
         return res.status(404).json({ error: "Employee not found" });
       }
@@ -268,7 +297,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const employeesRef = db.collection("employees");
       const snapshot = await employeesRef.get();
 
-      const employees = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const employees = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
       return res.json(employees);
     } catch (error: any) {
       console.error("Get employees error:", error);
@@ -283,7 +315,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const attendanceRef = db.collection("attendance");
       const snapshot = await attendanceRef.where("date", "==", today).get();
 
-      const attendance = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const attendance = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
       return res.json(attendance);
     } catch (error: any) {
       console.error("Get today attendance error:", error);
@@ -297,7 +332,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const leavesRef = db.collection("leaves");
       const snapshot = await leavesRef.where("status", "==", "pending").get();
 
-      const leaves = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const leaves = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
       return res.json(leaves);
     } catch (error: any) {
       console.error("Get pending leaves error:", error);
@@ -322,6 +360,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const leaveData = leaveDoc.data();
+      if (!leaveData) {
+        return res.status(404).json({ error: "Leave data not found" });
+      }
 
       // Update leave request
       await leaveRef.update({
@@ -332,17 +373,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Update employee leave/permission balance
       if (status === "approved") {
-        const employeeRef = db.collection("employees").doc(leaveData?.employeeId);
+        const employeeRef = db
+          .collection("employees")
+          .doc(leaveData.employeeId);
         const employeeDoc = await employeeRef.get();
         const employee = employeeDoc.data();
 
-        if (leaveData?.type === "leave") {
+        if (leaveData.type === "leave") {
           await employeeRef.update({
             usedLeaves: (employee?.usedLeaves || 0) + leaveData.duration,
           });
         } else {
           await employeeRef.update({
-            usedPermissions: (employee?.usedPermissions || 0) + leaveData.duration,
+            usedPermissions:
+              (employee?.usedPermissions || 0) + leaveData.duration,
           });
         }
       }
@@ -444,13 +488,22 @@ async function generateMonthlyReport() {
   try {
     // Get all employees
     const employeesSnapshot = await db.collection("employees").get();
-    const employees = employeesSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    const employees = employeesSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
     // Get attendance for the past month
     const lastMonth = new Date();
     lastMonth.setMonth(lastMonth.getMonth() - 1);
-    const startDate = format(new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 1), "yyyy-MM-dd");
-    const endDate = format(new Date(lastMonth.getFullYear(), lastMonth.getMonth() + 1, 0), "yyyy-MM-dd");
+    const startDate = format(
+      new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 1),
+      "yyyy-MM-dd"
+    );
+    const endDate = format(
+      new Date(lastMonth.getFullYear(), lastMonth.getMonth() + 1, 0),
+      "yyyy-MM-dd"
+    );
 
     const reportData = [];
 
@@ -462,7 +515,9 @@ async function generateMonthlyReport() {
         .where("date", "<=", endDate)
         .get();
 
-      const workingDays = attendanceSnapshot.docs.filter((doc) => doc.data().status === "checked-out").length;
+      const workingDays = attendanceSnapshot.docs.filter(
+        (doc) => doc.data().status === "checked-out"
+      ).length;
 
       reportData.push({
         "Employee Name": employee.fullName,
@@ -479,7 +534,10 @@ async function generateMonthlyReport() {
     const worksheet = XLSX.utils.json_to_sheet(reportData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Monthly Report");
-    const excelBuffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+    const excelBuffer = XLSX.write(workbook, {
+      type: "buffer",
+      bookType: "xlsx",
+    });
 
     // Send email with Excel attachment via Resend
     const { client, fromEmail } = await getResendClient();
@@ -489,11 +547,17 @@ async function generateMonthlyReport() {
       subject: `Monthly Attendance Report - ${format(lastMonth, "MMMM yyyy")}`,
       html: `
         <h2>Monthly Attendance Report</h2>
-        <p>Please find attached the monthly attendance report for ${format(lastMonth, "MMMM yyyy")}.</p>
+        <p>Please find attached the monthly attendance report for ${format(
+          lastMonth,
+          "MMMM yyyy"
+        )}.</p>
         <p>Summary:</p>
         <ul>
           <li>Total Employees: ${employees.length}</li>
-          <li>Report Period: ${format(new Date(startDate), "MMM d")} - ${format(new Date(endDate), "MMM d, yyyy")}</li>
+          <li>Report Period: ${format(new Date(startDate), "MMM d")} - ${format(
+        new Date(endDate),
+        "MMM d, yyyy"
+      )}</li>
         </ul>
       `,
       attachments: [

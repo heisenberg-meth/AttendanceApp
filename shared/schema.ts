@@ -113,10 +113,20 @@ export const leaveRequestSchema = z.object({
 });
 
 export const chatMessageFormSchema = z.object({
-  message: z.string().min(1, "Message cannot be empty").max(1000, "Message too long"),
+  message: z
+    .string()
+    .min(1, "Message cannot be empty")
+    .max(1000, "Message too long"),
 });
 
 export type LoginWithEmployeeIdForm = z.infer<typeof loginWithEmployeeIdSchema>;
 export type OnboardingForm = z.infer<typeof onboardingSchema>;
 export type LeaveRequestForm = z.infer<typeof leaveRequestSchema>;
 export type ChatMessageForm = z.infer<typeof chatMessageFormSchema>;
+
+export type User = {
+  id: string;
+  username: string;
+};
+
+export type InsertUser = Omit<User, "id">;

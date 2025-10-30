@@ -1,6 +1,7 @@
 # Employee Attendance & Leave Management PWA - Design Guidelines
 
 ## Design Principles & System
+
 **Approach**: Material Design with custom palette for data-dense business application
 **Core Values**: Clarity over decoration, instant feedback, consistent hierarchy, mobile-first
 
@@ -9,21 +10,23 @@
 ## Visual Foundation
 
 ### Color Palette
+
 ```css
---bg-primary: #FFFFFF;
+--bg-primary: #ffffff;
 --text-primary: #000000;
 --text-secondary: #666666;
 --text-caption: #999999;
---accent: #B39DDB;           /* Interactive elements */
---success: #66BB6A;          /* Approvals, check-ins */
---warning: #FFA726;          /* Pending states */
---error: #EF5350;            /* Rejections, check-outs */
---border: #E0E0E0;
---bg-subtle: #FAFAFA;
---accent-light: #E8DFF5;     /* Backgrounds, empty states */
+--accent: #b39ddb; /* Interactive elements */
+--success: #66bb6a; /* Approvals, check-ins */
+--warning: #ffa726; /* Pending states */
+--error: #ef5350; /* Rejections, check-outs */
+--border: #e0e0e0;
+--bg-subtle: #fafafa;
+--accent-light: #e8dff5; /* Backgrounds, empty states */
 ```
 
 ### Typography (Inter font)
+
 ```css
 H1: 28px/Bold(700)/-0.5px    /* Page titles */
 H2: 22px/Semibold(600)       /* Section headers */
@@ -35,12 +38,14 @@ Button: 15px/Medium(500)/uppercase/0.5px
 ```
 
 ### Spacing Scale (Tailwind units)
+
 - Component padding: **16px mobile, 24px desktop**
 - Section spacing: **24px** between sections
 - Form fields: **12px** between inputs
 - Icon-text gap: **12px**
 
 ### Container Widths
+
 - Superadmin: `max-w-7xl` (1280px)
 - Employee views: `max-w-4xl` (896px)
 - Mobile padding: **16px**, Desktop: **32px**
@@ -50,23 +55,28 @@ Button: 15px/Medium(500)/uppercase/0.5px
 ## Component Specifications
 
 ### Navigation
+
 **Bottom Tab Bar** (Mobile, 64px height)
+
 - 4 tabs: Attendance, Leaves, Chat, Profile
 - Active: Purple icon/text + 3px top border
 - Inactive: Gray (#999)
 
 **Top App Bar** (56px height)
+
 - Logo left, notification bell right
 - White bg, 1px bottom border (#E0E0E0)
 - Notification: 8px red dot
 
 ### Cards
+
 **Standard Card**
+
 ```css
 background: white;
 border-radius: 12px;
 padding: 16px;
-box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 ```
 
 **Attendance Card**: Add 4px left border (green=in, red=out), 48px circular photo, status badge
@@ -76,16 +86,19 @@ box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 **Dashboard Stats**: 32px bold number, 12px gray label, 24px purple icon top-right, hover lift (-2px)
 
 ### Forms & Inputs
+
 **Text Input** (48px height)
+
 ```css
-border: 1px solid #E0E0E0;
+border: 1px solid #e0e0e0;
 border-radius: 8px;
-focus: 2px solid #B39DDB + purple glow;
+focus: 2px solid #b39ddb + purple glow;
 error: red border + 12px error text below;
 label: 12px gray above field;
 ```
 
 **Buttons**
+
 - **Primary**: Purple bg (#B39DDB), white text, 48px height, 8px radius, shadow `0 2px 4px rgba(179,157,219,0.3)`, hover darken 10%
 - **Secondary**: Transparent bg, 1px purple border, purple text
 - **FAB**: 56px circle, purple bg, bottom-right 16px, shadow `0 4px 12px rgba(179,157,219,0.4)`
@@ -93,7 +106,9 @@ label: 12px gray above field;
 **Camera Button** (Attendance): 72px purple circle, white icon (32px), bottom-center, scale 0.95 on press
 
 ### Chat Interface
+
 **Message Bubbles** (max-width 80%)
+
 - Employee: Purple bg, white text, right-aligned, 16px radius (sharp top-left)
 - Admin: Light gray bg (#F5F5F5), black text, left-aligned, 16px radius (sharp top-right)
 - Timestamp: 10px gray italic below
@@ -101,7 +116,9 @@ label: 12px gray above field;
 **Input Bar**: 56px fixed bottom, white bg, top border, text field + 40px purple send button
 
 ### Data Displays
+
 **Table** (Superadmin)
+
 - Alternating rows: white/#FAFAFA
 - Header: Purple bg, white text, sticky
 - Cell padding: 12px
@@ -110,9 +127,11 @@ label: 12px gray above field;
 **Leave Balance Bar**: Horizontal progress (purple used/gray remaining)
 
 ### Overlays
+
 **Modal**: Centered, `rgba(0,0,0,0.5)` backdrop, white 16px radius box, max-width 480px/600px, padding 24px
 
 **Toast**: 56px from top, 3s auto-dismiss
+
 - Success: Green bg, checkmark
 - Error: Red bg, alert icon
 
@@ -123,6 +142,7 @@ label: 12px gray above field;
 ## Animations
 
 **Timing**
+
 - Page transitions: Fade + slide up 20px (300ms ease-out)
 - Tab switches: Cross-fade (200ms)
 - Button press: Scale 0.95 (100ms)
@@ -140,12 +160,14 @@ label: 12px gray above field;
 **Hero Image** (Login): Abstract office silhouettes with attendance icons, 300px mobile/400px desktop, 10% purple overlay
 
 **Profile Photos**
+
 - Card thumbnail: 48px circular
 - Detail view: 200px square
 - Table: 40px circular
 - Treatment: Rounded, subtle shadow, grayscale in lists
 
 **Empty States**: 120px line illustrations in light purple (#E8DFF5)
+
 - No attendance: Calendar with checkmark
 - No leaves: Vacation icon
 - No messages: Speech bubbles
@@ -175,7 +197,7 @@ label: 12px gray above field;
 ✓ **Focus**: 2px purple outline for keyboard nav  
 ✓ **Aria-labels**: All icons and interactive elements  
 ✓ **Form errors**: Clear messages associated with fields  
-✓ **Live regions**: Announce loading/state changes  
+✓ **Live regions**: Announce loading/state changes
 
 ---
 

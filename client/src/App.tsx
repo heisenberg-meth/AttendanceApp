@@ -17,7 +17,11 @@ import SuperadminDashboard from "@/pages/superadmin-dashboard";
 import { PageLoader } from "@/components/loader";
 import NotFound from "@/pages/not-found";
 
-function ProtectedRoute({ component: Component }: { component: () => JSX.Element }) {
+function ProtectedRoute({
+  component: Component,
+}: {
+  component: () => JSX.Element | null;
+}) {
   const { firebaseUser, employee, loading } = useAuth();
 
   if (loading) {
@@ -35,7 +39,11 @@ function ProtectedRoute({ component: Component }: { component: () => JSX.Element
   return <Component />;
 }
 
-function SuperadminRoute({ component: Component }: { component: () => JSX.Element }) {
+function SuperadminRoute({
+  component: Component,
+}: {
+  component: () => JSX.Element;
+}) {
   const { firebaseUser, employee, loading } = useAuth();
 
   if (loading) {
@@ -53,7 +61,12 @@ function SuperadminRoute({ component: Component }: { component: () => JSX.Elemen
   return <Component />;
 }
 
-function AuthRoute({ component: Component }: { component: (props: any) => JSX.Element; props?: any }) {
+function AuthRoute({
+  component: Component,
+}: {
+  component: (props: any) => JSX.Element;
+  props?: any;
+}) {
   const { firebaseUser, employee, loading } = useAuth();
 
   if (loading) {
@@ -74,12 +87,8 @@ function Router() {
   return (
     <Switch>
       {/* Auth Routes */}
-      <Route path="/login">
-        {() => <AuthRoute component={LoginPage} />}
-      </Route>
-      <Route path="/signup">
-        {() => <AuthRoute component={SignupPage} />}
-      </Route>
+      <Route path="/login">{() => <AuthRoute component={LoginPage} />}</Route>
+      <Route path="/signup">{() => <AuthRoute component={SignupPage} />}</Route>
       <Route path="/onboarding" component={OnboardingPage} />
 
       {/* Employee Routes */}
