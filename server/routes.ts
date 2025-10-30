@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { Resend } from "resend";
-import * as admin from "firebase-admin";
+import admin from "firebase-admin";
 import * as XLSX from "xlsx";
 import cron from "node-cron";
 import { format } from "date-fns";
